@@ -22,7 +22,11 @@ function badRequest (res) {
 module.exports = function (req, res) {
   var params = req.parsedUrl.query;
   var query = {
-    from: params.from
+    from: params.from,
+    facets: {
+      name: {terms: {field: "name.raw"}},
+      category: {terms: {field: "category.raw"}}
+    }
   };
   res.setHeader('Content-Type', 'application/json');
   if (params.q) {
@@ -42,7 +46,8 @@ module.exports = function (req, res) {
       total: data.hits.total,
       records: data.hits.hits.map(function (hit) {
         return hit._source;
-      })
+      }),
+      facets: data.facets
     });
     res.end(newdata);
   });

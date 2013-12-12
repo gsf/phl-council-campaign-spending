@@ -9,6 +9,7 @@ var from = 0;
 var total = 0;
 var resultsElem = document.querySelector('.results');
 var recordHTML;
+var facetsSet = false;
 
 document.querySelector('.search').value = params.q || '';
 
@@ -51,12 +52,28 @@ function getPath (path, cb) {
   });
 }
 
+function renderFacets (facetName, result) {
+  var list = document.createElement('ul');
+  list.innerHTML = result.facets[facetName].terms.map(function (facet) {
+    return '<li><a href="/?q=' + encodeURIComponent(
+      (params.q ? params.q + ' ' : '') + 
+      facetName + ':"' + facet.term + '"'
+    ) + '">' + facet.term + '</a> (' + facet.count + ')</li>';
+  }).join('');
+  document.querySelector('.' + facetName + '.facets').appendChild(list);
+}
+
 function appendRecords (html) {
   var path = apiStr;
   if (from) path += '&from=' + from;
   getPath(path, function (data) {
     var result = JSON.parse(data);
     var record;
+    if (!facetsSet) {
+      renderFacets('name', result);
+      renderFacets('category', result);
+      facetsSet = true;
+    }
     total = result.total;
     document.querySelector('.total').innerHTML = result.total;
     for (var i=0; i<result.records.length; i++) {
