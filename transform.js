@@ -26,7 +26,7 @@ csv()
     payee: row.Payee,
     address: row['Payee Address'],
     date: row['Date'],
-    amount: row.Amount,
+    amount: row.Amount.substr(1).replace(',', ''),
     description: row.Description,
     category: row.Category
   }) + '\n';
