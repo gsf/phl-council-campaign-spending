@@ -20,22 +20,21 @@ function badRequest (res) {
 }
 
 module.exports = function (req, res) {
-  var query, reqQuery = req.parsedUrl.query;
+  var params = req.parsedUrl.query;
+  var query = {
+    from: params.from
+  };
   res.setHeader('Content-Type', 'application/json');
-  if (!reqQuery.q) {
-    query = {
-      query: {matchAll: {}},
-      sort: [{amount: 'desc'}]
-    };
-  } else {
-    query = {
-      query: {
-        queryString: {
-          defaultOperator: 'AND',
-          query: reqQuery.q
-        }
+  if (params.q) {
+    query.query = {
+      queryString: {
+        defaultOperator: 'AND',
+        query: params.q
       }
     };
+  } else {
+    query.query = {matchAll: {}};
+    query.sort = [{amount: 'desc'}];
   }
   es.search(query, function(err, data) {
     if (err) return error(err, res);
