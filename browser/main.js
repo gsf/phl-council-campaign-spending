@@ -2,15 +2,15 @@ var http = require('http');
 var hyperglue = require('hyperglue');
 var qs = require('querystring');
 
-function getRecordHtml (cb) {
-  http.get({path: '/record.html'}, function (res) {
-    var data = '';
-    res.on('data', function (chunk) {data += chunk});
-    res.on('end', function () {
-      cb(data);
-    });
-  });
-}
+var queryStr = window.location.search.substr(1);
+var apiStr = '/?f=j&' + queryStr;
+var params = qs.parse(queryStr);
+var from = 0;
+var total = 0;
+var resultsElem = document.querySelector('.results');
+var recordHTML;
+
+document.querySelector('.search').value = params.q || '';
 
 function render (html, record, index) {
   return hyperglue(html, {
@@ -41,27 +41,41 @@ function render (html, record, index) {
   });
 }
 
-var queryStr = window.location.search.substr(1);
-var params = qs.parse(queryStr);
-
-document.querySelector('.search').value = params.q || '';
-
-getRecordHtml(function (html) {
-  http.get({path: '/?f=j&' + queryStr}, function (res) {
+function getPath (path, cb) {
+  http.get({path: path}, function (res) {
     var data = '';
     res.on('data', function (chunk) {data += chunk});
     res.on('end', function () {
-      var index;
-      var result = JSON.parse(data);
-      var record;
-      document.querySelector('.total').innerHTML = result.total;
-      var resultsElem = document.querySelector('.results');
-      for (var i=0; i<result.records.length; i++) {
-        index = i+1;
-        record = result.records[i];
-        console.log(record);
-        resultsElem.appendChild(render(html, record, index));
-      }
+      cb(data)
     });
   });
+}
+
+function appendRecords (html) {
+  var path = apiStr;
+  if (from) path += '&from=' + from;
+  getPath(path, function (data) {
+    var result = JSON.parse(data);
+    var record;
+    total = result.total;
+    document.querySelector('.total').innerHTML = result.total;
+    for (var i=0; i<result.records.length; i++) {
+      record = result.records[i];
+      resultsElem.appendChild(render(html, record, i+1+from));
+    }
+    from += 10;
+  });
+}
+
+getPath('/record.html', function (html) {
+  recordHTML = html;
+  appendRecords(html);
 });
+
+
+setInterval(function () {
+  if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 100 && total > from) {
+    console.log(from);
+    appendRecords(recordHTML);
+  }
+}, 250);
