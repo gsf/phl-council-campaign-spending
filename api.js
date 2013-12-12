@@ -41,7 +41,6 @@ module.exports = function (req, res) {
     var newdata = JSON.stringify({
       total: data.hits.total,
       records: data.hits.hits.map(function (hit) {
-        hit._source.id = hit._id;
         return hit._source;
       })
     });

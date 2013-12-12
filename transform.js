@@ -16,12 +16,14 @@ csv()
 .to.path(__dirname+'/campaign-spending.out')
 .transform(function (row) {
   process.stdout.write('.');
+  var id = generateId();
   return JSON.stringify({
     index: {
-      _id: generateId()
+      _id: id
     }
   }) + '\n' +
   JSON.stringify({
+    id: id,
     name: row.Councilperson,
     payee: row.Payee,
     address: row['Payee Address'],
