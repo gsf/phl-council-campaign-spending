@@ -18,8 +18,6 @@ csv()
   process.stdout.write('.');
   return JSON.stringify({
     index: {
-      _index: 'campaign-spending',
-      _type: 'record',
       _id: generateId()
     }
   }) + '\n' +
