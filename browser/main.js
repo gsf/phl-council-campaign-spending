@@ -12,9 +12,9 @@ function getRecordHtml (cb) {
   });
 }
 
-function render (html, record, number) {
+function render (html, record, index) {
   return hyperglue(html, {
-    '.number': number,
+    '.index': index,
     '.id a': {
       href: '/?q=id:' + record.id,
       _text: record.id
@@ -51,16 +51,16 @@ getRecordHtml(function (html) {
     var data = '';
     res.on('data', function (chunk) {data += chunk});
     res.on('end', function () {
-      var number;
+      var index;
       var result = JSON.parse(data);
       var record;
       document.querySelector('.total').innerHTML = result.total;
       var resultsElem = document.querySelector('.results');
       for (var i=0; i<result.records.length; i++) {
-        number = i+1;
+        index = i+1;
         record = result.records[i];
         console.log(record);
-        resultsElem.appendChild(render(html, record, number));
+        resultsElem.appendChild(render(html, record, index));
       }
     });
   });
