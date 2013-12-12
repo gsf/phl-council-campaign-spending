@@ -25,7 +25,19 @@ module.exports = function (req, res) {
     from: params.from,
     facets: {
       name: {terms: {field: "name.raw"}},
-      category: {terms: {field: "category.raw"}}
+      category: {terms: {field: "category.raw"}},
+      amount: {
+        range: {
+          field: 'amount',
+          ranges: [
+            {to: 100},
+            {from: 100, to: 1000},
+            {from: 1000, to: 10000},
+            {from: 10000, to: 100000},
+            {from: 100000}
+          ]
+        }
+      }
     }
   };
   res.setHeader('Content-Type', 'application/json');

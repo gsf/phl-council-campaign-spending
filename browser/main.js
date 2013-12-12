@@ -52,15 +52,34 @@ function getPath (path, cb) {
   });
 }
 
+function cap (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function renderFacets (facetName, result) {
-  var list = document.createElement('ul');
-  list.innerHTML = result.facets[facetName].terms.map(function (facet) {
-    return '<li><a href="/?q=' + encodeURIComponent(
-      (params.q ? params.q + ' ' : '') + 
-      facetName + ':"' + facet.term + '"'
-    ) + '">' + facet.term + '</a> (' + facet.count + ')</li>';
-  }).join('');
-  document.querySelector('.' + facetName + '.facets').appendChild(list);
+  if (!result.facets[facetName].total) return;
+  document.querySelector('.' + facetName + '.facets').innerHTML = '<h2>' +
+    cap(facetName) + '</h2><ul>' +
+    result.facets[facetName].terms.map(function (facet) {
+      return '<li><a href="/?q=' + encodeURIComponent(
+        (params.q ? params.q + ' ' : '') +
+        facetName + ':"' + facet.term + '"'
+      ) + '">' + facet.term + '</a> (' + facet.count + ')</li>';
+    }).join('') + '</ul>';
+}
+
+function renderRangeFacets (facetName, result) {
+  document.querySelector('.' + facetName + '.facets').innerHTML = '<h2>' +
+    cap(facetName) + '</h2><ul>' +
+    result.facets[facetName].ranges.map(function (facet) {
+      if (!facet.count) return;
+      return '<li><a href="/?q=' + encodeURIComponent(
+        (params.q ? params.q + ' ' : '') + facetName +
+        ':[' + (facet.from || '*') + ' TO ' + (facet.to || '*') + ']'
+        ) + '">$' + (facet.from ? Number(facet.from).toLocaleString() : '0') +
+        ' to ' + (facet.to ? '$' + Number(facet.to).toLocaleString() : '∞') +
+        '</a> (' + facet.count + ')</li>';
+    }).join('') + '</ul>';
 }
 
 function appendRecords (html) {
@@ -69,9 +88,10 @@ function appendRecords (html) {
   getPath(path, function (data) {
     var result = JSON.parse(data);
     var record;
-    if (!facetsSet) {
+    if (!facetsSet && result.total) {
       renderFacets('name', result);
       renderFacets('category', result);
+      renderRangeFacets('amount', result);
       facetsSet = true;
     }
     total = result.total;
