@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "description": "A searchable database of Philadelphia City Council campaign committee spending",
   "main": "server.js",
-  "repository": "url": "git://github.com/gsf/phl-council-campaign-spending.git",
+  "repository": "git://github.com/gsf/phl-council-campaign-spending.git",
   "author": "AxisPhilly",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "csv": "~0.3.6"
+  }
 }
