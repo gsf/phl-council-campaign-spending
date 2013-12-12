@@ -13,8 +13,12 @@ http.createServer(function (req, res) {
 
   console.log(req.method, req.url);
 
-  if (url.parse(req.url).pathname == '/') {
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  req.parsedUrl = url.parse(req.url, true);
+  if (req.parsedUrl.pathname == '/') {
+    if (req.parsedUrl.query.f == 'j') {
+      return require('./api.js')(req, res);
+    }
+    res.setHeader('Content-Type', 'text/html');
     fs.createReadStream(__dirname + '/static/index.html').pipe(res);
     return;
   }

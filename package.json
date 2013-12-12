@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "st": "~0.2.3",
-    "logstamp": "~0.4.0"
+    "logstamp": "~0.4.0",
+    "es": "~0.3.14"
   }
 }
