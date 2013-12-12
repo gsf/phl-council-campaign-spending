@@ -12,6 +12,10 @@
   "dependencies": {
     "st": "~0.2.3",
     "logstamp": "~0.4.0",
-    "es": "~0.3.14"
+    "es": "~0.3.14",
+    "hyperglue": "~1.3.0"
+  },
+  "scripts": {
+    "build": "browserify browser/main.js | uglifyjs -mc > static/script.js"
   }
 }
