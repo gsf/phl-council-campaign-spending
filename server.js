@@ -23,7 +23,11 @@ http.createServer(function (req, res) {
     return;
   }
 
-  st({path: __dirname + '/static'})(req, res);
+  st({path: __dirname + '/static', passthrough: true})(req, res, function () {
+    console.warn('Warning: Not Found');
+    res.statusCode = 404;
+    res.end('Not Found');
+  });
 }).listen(port, function () {
   console.log('Listening on port', port);
 });
