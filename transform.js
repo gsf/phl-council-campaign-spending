@@ -11,12 +11,17 @@ function generateId () {
   return id;
 }
 
+function zeroPad (num) {
+  return ('0' + num).slice(-2);
+}
+
 csv()
 .from.stream(fs.createReadStream(__dirname+'/campaign-spending.csv'), {columns: true, trim: true})
 .to.path(__dirname+'/campaign-spending.out')
 .transform(function (row) {
   process.stdout.write('.');
   var id = generateId();
+  var dateArray = row['Date'].split('/');
   return JSON.stringify({
     index: {
       _id: id
@@ -27,7 +32,7 @@ csv()
     name: row.Councilperson,
     payee: row.Payee,
     address: row['Payee Address'],
-    date: row['Date'],
+    date: dateArray[2] + '-' + zeroPad(dateArray[0]) + '-' + zeroPad(dateArray[1]),
     amount: row.Amount.substr(1).replace(',', ''),
     description: row.Description,
     category: row.Category
