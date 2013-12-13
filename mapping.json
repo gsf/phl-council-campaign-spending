@@ -22,7 +22,8 @@
           "category": {"type": "string"},
           "raw": {"type": "string", "index": "not_analyzed"}
         }
-      }
+      },
+      "date": {"type": "date"}
     }
   }
 }
