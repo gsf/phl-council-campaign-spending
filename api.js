@@ -52,6 +52,13 @@ module.exports = function (req, res) {
     query.query = {matchAll: {}};
     query.sort = [{amount: 'desc'}];
   }
+  if (params.sort == 'amount') {
+    query.sort = [{amount: 'desc'}];
+  } else if (params.sort == 'newest') {
+    query.sort = [{date: 'desc'}];
+  } else if (params.sort == 'oldest') {
+    query.sort = [{date: 'asc'}];
+  }
   es.search(query, function(err, data) {
     if (err) return error(err, res);
     var newdata = JSON.stringify({

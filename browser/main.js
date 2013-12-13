@@ -9,7 +9,7 @@ var from = 0;
 var total = 0;
 var resultsElem = document.querySelector('.results');
 var recordHTML;
-var facetsSet = false;
+var topRendered = false;
 
 document.querySelector('.search').value = params.q || '';
 
@@ -82,20 +82,35 @@ function renderRangeFacets (facetName, result) {
     }).join('') + '</ul>';
 }
 
+function renderSort (result) {
+  var q = params.q ? encodeURIComponent(params.q) : '';
+  var relevance = params.sort ?
+    '<a href="/?q=' + q + '">relevance</a>' : 'relevance';
+  var amount = ((params.sort == 'amount' || (!params.sort && !q)) ?
+    'amount' : '<a href="/?q=' + q + '&sort=amount">amount</a>');
+  var newest = (params.sort == 'newest' ?
+    'newest' : '<a href="/?q=' + q + '&sort=newest">newest</a>');
+  var oldest = (params.sort == 'oldest' ?
+    'oldest' : '<a href="/?q=' + q + '&sort=oldest">oldest</a>');
+  document.querySelector('.sort').innerHTML = 'Sort by ' + (q && relevance + ' ') +
+    amount + ' ' + newest + ' ' + oldest;
+}
+
 function appendRecords (html) {
   var path = apiStr;
   if (from) path += '&from=' + from;
   getPath(path, function (data) {
     var result = JSON.parse(data);
     var record;
-    if (!facetsSet && result.total) {
+    total = result.total;
+    if (!topRendered && total) {
       renderFacets('name', result);
       renderFacets('category', result);
       renderRangeFacets('amount', result);
-      facetsSet = true;
+      renderSort();
+      topRendered = true;
     }
-    total = result.total;
-    document.querySelector('.total').innerHTML = result.total;
+    document.querySelector('.total').innerHTML = total;
     for (var i=0; i<result.records.length; i++) {
       record = result.records[i];
       resultsElem.appendChild(render(html, record, i+1+from));
