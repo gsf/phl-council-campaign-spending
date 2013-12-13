@@ -1,3 +1,4 @@
+var accounting = require('accounting');
 var http = require('http');
 var hyperglue = require('hyperglue');
 var qs = require('querystring');
@@ -32,7 +33,7 @@ function render (html, record, index) {
       href: '/?q=name:"' + encodeURIComponent(record.name) + '"',
       _text: record.name
     },
-    '.amount span': '$' + Number(record.amount).toLocaleString(),
+    '.amount span': accounting.formatMoney(record.amount),
     '.description span': record.description,
     '.address span': record.address,
     '.payee a': {
