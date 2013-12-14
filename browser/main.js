@@ -4,7 +4,7 @@ var hyperglue = require('hyperglue');
 var qs = require('querystring');
 
 var queryStr = window.location.search.substr(1);
-var apiStr = '/?f=j&' + queryStr;
+var apiStr = '/api?' + queryStr;
 var params = qs.parse(queryStr);
 var from = 0;
 var total = 0;

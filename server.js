@@ -15,12 +15,13 @@ http.createServer(function (req, res) {
 
   req.parsedUrl = url.parse(req.url, true);
   if (req.parsedUrl.pathname == '/') {
-    if (req.parsedUrl.query.f == 'j') {
-      return require('./api.js')(req, res);
-    }
     res.setHeader('Content-Type', 'text/html');
     fs.createReadStream(__dirname + '/static/index.html').pipe(res);
     return;
+  }
+
+  if (req.parsedUrl.pathname == '/api') {
+    return require('./api.js')(req, res);
   }
 
   st({path: __dirname + '/static', passthrough: true})(req, res, function () {
