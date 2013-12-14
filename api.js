@@ -24,7 +24,7 @@ module.exports = function (req, res) {
   var query = {
     from: params.from,
     facets: {
-      name: {terms: {field: "name.raw"}},
+      name: {terms: {field: "name.raw", size: 20}},
       category: {terms: {field: "category.raw"}},
       amount: {
         range: {
