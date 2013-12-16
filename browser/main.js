@@ -34,9 +34,9 @@ function renderRecord (record, index) {
     h('div.id',
       h('span.label', 'ID: '),
       h('a', {href: '/?q=id:' + record.id}, record.id)),
-    h('div.name',
-      h('span.label', 'Name: '),
-      h('a', {href: '/?q=name:"' + encodeURIComponent(record.name) + '"'}, record.name)),
+    h('div.councilperson',
+      h('span.label', 'Councilperson: '),
+      h('a', {href: '/?q=councilperson:"' + encodeURIComponent(record.councilperson) + '"'}, record.councilperson)),
     h('div.amount',
       h('span.label', 'Amount: '),
       h('span', accounting.formatMoney(record.amount))),
@@ -115,7 +115,7 @@ function renderTop (result) {
   document.querySelector('.search').value = params.q || '';
   document.querySelector('.total').innerHTML = total || 0;
   if (total) {
-    renderFacets('name', result);
+    renderFacets('councilperson', result);
     renderFacets('category', result);
     renderRangeFacets('amount', result);
     renderSort();

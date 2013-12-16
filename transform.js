@@ -29,7 +29,7 @@ csv()
   }) + '\n' +
   JSON.stringify({
     id: id,
-    name: row.Councilperson,
+    councilperson: row.Councilperson,
     payee: row.Payee,
     address: row['Payee Address'],
     date: dateArray[2] + '-' + zeroPad(dateArray[0]) + '-' + zeroPad(dateArray[1]),
