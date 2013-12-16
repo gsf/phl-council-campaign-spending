@@ -4,17 +4,31 @@ var hyperglue = require('hyperglue');
 var qs = require('querystring');
 
 var queryStr = window.location.search.substr(1);
-var apiStr = '/api?' + queryStr;
 var params = qs.parse(queryStr);
+var resultsElem = document.querySelector('.results');
 var from = 0;
 var total = 0;
-var resultsElem = document.querySelector('.results');
-var recordHTML;
-var topRendered = false;
 
-document.querySelector('.search').value = params.q || '';
+function getPath (path, cb) {
+  http.get({path: path}, function (res) {
+    var data = '';
+    res.on('data', function (chunk) {data += chunk});
+    res.on('end', function () {
+      cb(data)
+    });
+  });
+}
 
-function render (html, record, index) {
+function getResult (cb) {
+  var path = '/api?' + queryStr;
+  if (from) path += '&from=' + from;
+  getPath(path, function (data) {
+    var result = JSON.parse(data);
+    cb(result);
+  });
+}
+
+function renderRecord (html, record, index) {
   return hyperglue(html, {
     '.index': index,
     '.id a': {
@@ -43,14 +57,12 @@ function render (html, record, index) {
   });
 }
 
-function getPath (path, cb) {
-  http.get({path: path}, function (res) {
-    var data = '';
-    res.on('data', function (chunk) {data += chunk});
-    res.on('end', function () {
-      cb(data)
-    });
-  });
+function renderRecords (result, html) {
+  var record;
+  for (var i=0; i<result.records.length; i++) {
+    record = result.records[i];
+    resultsElem.appendChild(renderRecord(html, record, i+1+from));
+  }
 }
 
 function cap (string) {
@@ -59,7 +71,7 @@ function cap (string) {
 
 function renderFacets (facetName, result) {
   if (!result.facets[facetName].total) return;
-  document.querySelector('.' + facetName + '.facets').innerHTML = '<h2>' +
+  document.querySelector('.' + facetName + '.facet').innerHTML = '<h2>' +
     cap(facetName) + '</h2><ul>' +
     result.facets[facetName].terms.map(function (facet) {
       return '<li><a href="/?q=' + encodeURIComponent(
@@ -70,7 +82,7 @@ function renderFacets (facetName, result) {
 }
 
 function renderRangeFacets (facetName, result) {
-  document.querySelector('.' + facetName + '.facets').innerHTML = '<h2>' +
+  document.querySelector('.' + facetName + '.facet').innerHTML = '<h2>' +
     cap(facetName) + '</h2><ul>' +
     result.facets[facetName].ranges.map(function (facet) {
       if (!facet.count) return;
@@ -97,38 +109,29 @@ function renderSort (result) {
     amount + ' ' + newest + ' ' + oldest;
 }
 
-function appendRecords (html) {
-  var path = apiStr;
-  if (from) path += '&from=' + from;
-  getPath(path, function (data) {
-    var result = JSON.parse(data);
-    var record;
-    total = result.total;
-    if (!topRendered && total) {
-      renderFacets('name', result);
-      renderFacets('category', result);
-      renderRangeFacets('amount', result);
-      renderSort();
-      topRendered = true;
-    }
-    document.querySelector('.total').innerHTML = total;
-    for (var i=0; i<result.records.length; i++) {
-      record = result.records[i];
-      resultsElem.appendChild(render(html, record, i+1+from));
-    }
-    from += 10;
-  });
+function renderTop (result) {
+  total = result.total;
+  document.querySelector('.search').value = params.q || '';
+  document.querySelector('.total').innerHTML = total || 0;
+  if (total) {
+    renderFacets('name', result);
+    renderFacets('category', result);
+    renderRangeFacets('amount', result);
+    renderSort();
+  }
 }
 
-getPath('/record.html', function (html) {
-  recordHTML = html;
-  appendRecords(html);
+getResult(function (result) {
+  renderTop(result);
+  getPath('/record.html', function (html) {
+    renderRecords(result, html);
+    setInterval(function () {
+      if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 100 && total > from) {
+        getResult(function (result) {
+          renderRecords(result, html);
+        });
+        from += 10;
+      }
+    }, 250);
+  });
 });
-
-
-setInterval(function () {
-  if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 100 && total > from) {
-    console.log(from);
-    appendRecords(recordHTML);
-  }
-}, 250);
