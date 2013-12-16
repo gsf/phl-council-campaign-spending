@@ -5,18 +5,28 @@
     <link href="style.css" rel="stylesheet">
   </head>
   <body>
-    <h1><a href="/">Philadelphia City Council Campaign Committee Spending</a></h1>
-    <form>
-      <div>
-        <input type="text" placeholder="Search" name="q" class="search">
+    <div class="container">
+      <h1><a href="/">Philadelphia City Council Campaign Committee Spending</a></h1>
+      <form>
+        <div>
+          <input type="text" placeholder="Search" name="q" class="search">
+        </div>
+      </form>
+      <div class="count"><span class="total"></span><span> results</span></div>
+      <div class="facets">
+        <div class="name facet">
+          <h2>COUNCILPERSON</h2>
+        </div>
+        <div class="amount facet">
+          <h2>AMOUNT</h2>
+        </div>
+        <div class="category facet">
+          <h2>CATEGORY</h2>
+        </div>
       </div>
-    </form>
-    <div class="count"><span class="total"></span> results</div>
-    <div class="name facets"></div>
-    <div class="category facets"></div>
-    <div class="amount facets"></div>
-    <div class="sort"></div>
-    <div class="results"></div>
+      <div class="sort"></div>
+      <div class="results"></div>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>

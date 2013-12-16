@@ -30,10 +30,10 @@ module.exports = function (req, res) {
         range: {
           field: 'amount',
           ranges: [
-            {to: 100},
-            {from: 100, to: 1000},
-            {from: 1000, to: 10000},
-            {from: 10000, to: 100000},
+            {to: 99},
+            {from: 100, to: 999},
+            {from: 1000, to: 9999},
+            {from: 10000, to: 99999},
             {from: 100000}
           ]
         }

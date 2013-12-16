@@ -1,6 +1,6 @@
 var accounting = require('accounting');
+var h = require('hyperscript');
 var http = require('http');
-var hyperglue = require('hyperglue');
 var qs = require('querystring');
 
 var queryStr = window.location.search.substr(1);
@@ -28,71 +28,72 @@ function getResult (cb) {
   });
 }
 
-function renderRecord (html, record, index) {
-  return hyperglue(html, {
-    '.index': index,
-    '.id a': {
-      href: '/?q=id:' + record.id,
-      _text: record.id
-    },
-    '.date a': {
-      href: '/?q=date:' + record.date,
-      _text: record.date
-    },
-    '.category a': {
-      href: '/?q=category:"' + encodeURIComponent(record.category) + '"',
-      _text: record.category
-    },
-    '.name a': {
-      href: '/?q=name:"' + encodeURIComponent(record.name) + '"',
-      _text: record.name
-    },
-    '.amount span': accounting.formatMoney(record.amount),
-    '.description span': record.description,
-    '.address span': record.address,
-    '.payee a': {
-      href: '/?q=payee:"' + encodeURIComponent(record.payee) + '"',
-      _text: record.payee
-    }
-  });
+function renderRecord (record, index) {
+  return h('div.record',
+    h('div.index', index),
+    h('div.id',
+      h('span.label', 'ID: '),
+      h('a', {href: '/?q=id:' + record.id}, record.id)),
+    h('div.name',
+      h('span.label', 'Name: '),
+      h('a', {href: '/?q=name:"' + encodeURIComponent(record.name) + '"'}, record.name)),
+    h('div.amount',
+      h('span.label', 'Amount: '),
+      h('span', accounting.formatMoney(record.amount))),
+    h('div.payee',
+      h('span.label', 'Payee: '),
+      h('a', {href: '/?q=payee:"' + encodeURIComponent(record.payee) + '"'}, record.payee)),
+    h('div.address',
+      h('span.label', 'Address: '),
+      h('span', record.address)),
+    h('div.date',
+      h('span.label', 'Date: '),
+      h('a', {href: '/?q=date:' + record.date}, record.date)),
+    h('div.description',
+      h('span.label', 'Description: '),
+      h('span', record.description)),
+    h('div.category',
+      h('span.label', 'Category: '),
+      h('a', {href: '/?q=category:"' + encodeURIComponent(record.category) + '"'}, record.category)));
 }
 
-function renderRecords (result, html) {
+function renderRecords (result) {
   var record;
   for (var i=0; i<result.records.length; i++) {
     record = result.records[i];
-    resultsElem.appendChild(renderRecord(html, record, i+1+from));
+    resultsElem.appendChild(renderRecord(record, i+1+from));
   }
-}
-
-function cap (string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function renderFacets (facetName, result) {
   if (!result.facets[facetName].total) return;
-  document.querySelector('.' + facetName + '.facet').innerHTML = '<h2>' +
-    cap(facetName) + '</h2><ul>' +
+  document.querySelector('.' + facetName + '.facet').appendChild(h('ul',
     result.facets[facetName].terms.map(function (facet) {
-      return '<li><a href="/?q=' + encodeURIComponent(
-        (params.q ? params.q + ' ' : '') +
-        facetName + ':"' + facet.term + '"'
-      ) + '">' + facet.term + '</a> (' + facet.count + ')</li>';
-    }).join('') + '</ul>';
+      return h('li', 
+        h('a', {href: '/?q=' + encodeURIComponent(
+          (params.q ? params.q + ' ' : '') +
+          facetName + ':"' + facet.term + '"'
+        )}, facet.term),
+        h('span', ' (' + facet.count + ')')
+      );
+    })
+  ));
 }
 
 function renderRangeFacets (facetName, result) {
-  document.querySelector('.' + facetName + '.facet').innerHTML = '<h2>' +
-    cap(facetName) + '</h2><ul>' +
+  document.querySelector('.' + facetName + '.facet').appendChild(h('ul',
     result.facets[facetName].ranges.map(function (facet) {
       if (!facet.count) return;
-      return '<li><a href="/?q=' + encodeURIComponent(
+      return h('li', 
+        h('a', {href: '/?q=' + encodeURIComponent(
         (params.q ? params.q + ' ' : '') + facetName +
         ':[' + (facet.from || '*') + ' TO ' + (facet.to || '*') + ']'
-        ) + '">$' + (facet.from ? Number(facet.from).toLocaleString() : '0') +
-        ' to ' + (facet.to ? '$' + Number(facet.to).toLocaleString() : '∞') +
-        '</a> (' + facet.count + ')</li>';
-    }).join('') + '</ul>';
+        )}, '$' + (facet.from ? Number(facet.from).toLocaleString() : '0') +
+        ' to ' + (facet.to ? '$' + Number(facet.to).toLocaleString() : '∞')),
+        h('span', ' (' + facet.count + ')')
+      );
+    })
+  ));
 }
 
 function renderSort (result) {
@@ -123,15 +124,13 @@ function renderTop (result) {
 
 getResult(function (result) {
   renderTop(result);
-  getPath('/record.html', function (html) {
-    renderRecords(result, html);
-    setInterval(function () {
-      if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 100 && total > from) {
-        getResult(function (result) {
-          renderRecords(result, html);
-        });
-        from += 10;
-      }
-    }, 250);
-  });
+  renderRecords(result);
+  setInterval(function () {
+    if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 100 && total > (from + 10)) {
+      from += 10;
+      getResult(function (result) {
+        renderRecords(result);
+      });
+    }
+  }, 250);
 });
