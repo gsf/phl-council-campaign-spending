@@ -99,21 +99,21 @@ function renderRangeFacets (facetName, result) {
 function renderSort (result) {
   var q = params.q ? encodeURIComponent(params.q) : '';
   var relevance = params.sort ?
-    '<a href="/?q=' + q + '">relevance</a>' : 'relevance';
+    '<a href="/?q=' + q + '">Relevance</a>' : 'Relevance';
   var amount = ((params.sort == 'amount' || (!params.sort && !q)) ?
-    'amount' : '<a href="/?q=' + q + '&sort=amount">amount</a>');
+    'Amount' : '<a href="/?q=' + q + '&sort=amount">Amount</a>');
   var newest = (params.sort == 'newest' ?
-    'newest' : '<a href="/?q=' + q + '&sort=newest">newest</a>');
+    'Newest' : '<a href="/?q=' + q + '&sort=newest">Newest</a>');
   var oldest = (params.sort == 'oldest' ?
-    'oldest' : '<a href="/?q=' + q + '&sort=oldest">oldest</a>');
-  document.querySelector('.sort').innerHTML = 'Sort by ' + (q && relevance + ' ') +
+    'Oldest' : '<a href="/?q=' + q + '&sort=oldest">Oldest</a>');
+  document.querySelector('.sort').innerHTML = 'Sort results: ' + (q && relevance + ' ') +
     amount + ' ' + newest + ' ' + oldest;
 }
 
 function renderTop (result) {
   total = result.total;
-  document.querySelector('.search').value = params.q || '';
-  document.querySelector('.total').innerHTML = total || 0;
+  document.querySelector('#search').value = params.q || '';
+  document.querySelector('.total').innerHTML = accounting.formatNumber(total) || 0;
   if (total) {
     renderFacets('councilperson', result);
     renderFacets('category', result);

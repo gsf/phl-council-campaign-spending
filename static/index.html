@@ -6,24 +6,52 @@
   </head>
   <body>
     <div class="container">
-      <h1><a href="/">Philadelphia City Council Campaign Committee Spending</a></h1>
-      <form>
-        <div>
-          <input type="text" placeholder="Search" name="q" class="search">
+      <div class="header">
+        <div class="axis-logo">
+          <a href="//axisphilly.org">
+            <img src="http://axisphilly.org/wp-content/themes/ally/images/axisphillylogo.png">
+          </a>
         </div>
-      </form>
-      <div class="count"><span class="total"></span><span> results</span></div>
-      <div class="facets">
-        <div class="councilperson facet">
-          <h2>COUNCILPERSON</h2>
-        </div>
-        <div class="amount facet">
-          <h2>AMOUNT</h2>
-        </div>
-        <div class="category facet">
-          <h2>CATEGORY</h2>
+        <h1><a href="/">City Council Campaign Spending</a></h1>
+      </div>
+      <div class="hero">
+        <div class="overlay">
+          <h2>Follow the Money</h2>
+          <p>Campaign spending has become a big money game in City Council, with incumbents
+          spending $7.2 million between 2008 and 2012. Use these databases to find how those
+          millions were spent.
+          <a href="//axisphilly.org/article/city-councils-big-money-game">Click here for an
+          overview on spending.</a> Go below for two tools you can use to search the database
+          to find the nitty gritty details.</p>
         </div>
       </div>
+      <div class="controls">
+        <p>Use the search engine below to explore the database by entering search terms, such as the firm or
+        individual who received money. You need to know some specifics, such as the name of the recipient or
+        nature of the expenditure. Example: If you want to know how much political consultant John Jamieson
+        got, type in that name and hit enter.</p>
+        <form>
+          <div class="search">
+            <input id="search" type="search" placeholder="Search terms, e.g. John Jamieson, taxis, campaign staff" name="q">
+          </div>
+        </form>
+        <p>You can also filter results by clicking on one or more categories below. For instance, to find out how
+        much Jim Kenney spent on Election Day Expenses, click on Kenney’s name and the category Election
+        Day Expenses. If you want to find all expenditures Council people made that totaled between $10,000
+        and $99,000 click on that amount. A full list will appear.</p>
+        <div class="facets">
+          <div class="councilperson facet">
+            <h2>Councilperson</h2>
+          </div>
+          <div class="category facet">
+            <h2>Category</h2>
+          </div>
+          <div class="amount facet">
+            <h2>Amount</h2>
+          </div>
+        </div>
+      </div>
+      <div class="count"><span>Currently displaying: </span><span class="total count-results"></span><span class="count-results"> results</span></div>
       <div class="sort"></div>
       <div class="results"></div>
     </div>

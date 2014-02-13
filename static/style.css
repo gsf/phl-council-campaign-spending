@@ -1,3 +1,23 @@
+@font-face {
+  font-family: 'Franklin Gothic Book';
+  src: url('//grrawr.com/f/franklin_gothic_book.eot');
+  src: url('//grrawr.com/f/franklin_gothic_book.eot?#iefix') format('embedded-opentype'),
+       url('//grrawr.com/f/franklin_gothic_book.svg#Franklin Gothic Book') format('svg'),
+       url('//grrawr.com/f/franklin_gothic_book.woff') format('woff'),
+       url('//grrawr.com/f/franklin_gothic_book.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Franklin Gothic Heavy';
+  src: url('//grrawr.com/f/franklin_gothic_heavy.eot');
+  src: url('//grrawr.com/f/franklin_gothic_heavy.eot?#iefix') format('embedded-opentype'),
+       url('//grrawr.com/f/franklin_gothic_heavy.svg#Franklin Gothic Heavy') format('svg'),
+       url('//grrawr.com/f/franklin_gothic_heavy.woff') format('woff'),
+       url('//grrawr.com/f/franklin_gothic_heavy.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -24,8 +44,8 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
-  color: #444;
-  font-family: proxima-nova, 'helvetica neue', helvetica, sans-serif;
+  color: #333;
+  font-family: 'Franklin Gothic Book', 'helvetica neue', helvetica, sans-serif;
 	line-height: 1.2;
 }
 ol, ul {
@@ -44,56 +64,116 @@ table {
 	border-spacing: 0;
 }
 a, a:visited {
-  color: #0e6791;
-  text-decoration: none;
+  color: #03a6df;
 }
-h1 {
-  font-family: calluna, georgia, serif;
-  font-size: 48px;
-  padding: 40px 0;
+p {
+  font-size: 24px;
 }
-h1 a, h1 a:visited {
-  color: #000;
+.axis-logo {
+  float: left;
+}
+.axis-logo img {
+  width: 226px;
 }
 .container {
+  margin: 0 auto;
+  width: 1200px;
+}
+.header {
+  background-color: #eee;
+  border: 1px solid #ccc;
   padding: 20px;
 }
+.header h1 {
+  font-family: 'Franklin Gothic Heavy', 'helvetica neue', helvetica, sans-serif;
+  font-size: 24px;
+  margin: 0 0 0 380px;
+}
+.header h1 a, .header h1 a:visited {
+  color: #000;
+  text-decoration: none;
+}
+.hero {
+  background-image: url('images/PhillyCityHall.png');
+  background-size: cover;
+  padding: 270px 0 200px;
+  position: relative;
+}
+.hero .overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 21px;
+  margin: 0 auto;
+  padding: 30px 40px;
+  width: 640px;
+}
+.hero .overlay h2 {
+  font-family: 'Franklin Gothic Heavy', 'helvetica neue', helvetica, sans-serif;
+  font-size: 36px;
+}
+.hero .overlay a, .hero .overlay a:visited {
+  color: #03a6df;
+}
+.controls {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 40px;
+}
 .search {
-  border: 1px solid #444;
-  color: #444;
-  font-size: 22px;
-  padding: 1px 2px;
+  padding: 30px 0 50px 0;
+}
+.search input {
+  background-color: #fde8a6;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  color: #333;
+  font-family: 'Franklin Gothic Book', 'helvetica neue', helvetica, sans-serif;
+  font-size: 24px;
+  padding: 5px 10px;
   width: 100%;
 }
-.count {
-  padding: 20px 0;
-}
 .facets {
+  background: url('images/columnback.png') repeat-y 50% 0;
+  color: #fff;
+  margin: 30px -5px 20px -5px;
   overflow: hidden;
+  padding: 0 0 15px 0;
+}
+.facets a, .facets a:visited {
+  color: #fff;
+}
+.facets h2 {
+  background-color: #106791;
+  font-family: 'Franklin Gothic Heavy', 'helvetica neue', helvetica, sans-serif;
+  font-size: 24px;
+  margin: 0 0 5px 0;
+  padding: 5px 15px;
+}
+.facets ul {
+  padding: 10px 15px;
+}
+.facets li {
+  margin: 0 0 0 1em;
+  text-indent: -1em;
 }
 .facet {
   float: left;
-  padding: 10px;
-  margin: 0 10px 0 0;
-  width: 30%;
+  font-size: 24px;
+  margin: 0 5px;
+  width: 366px;
 }
-.facet h2 {
-  font-size: 14px;
-  margin: 0 0 5px 0;
+.count {
+  font-size: 24px;
+  padding: 20px 0;
 }
-.councilperson.facet {
-  background: #BCD7E8;
-}
-.amount.facet {
-  background: #FEAE8E;
-}
-.category.facet {
-  background: #FFE5D8;
+.count-results {
+  color: #e02a3f;
+  font-family: 'Franklin Gothic Heavy', 'helvetica neue', helvetica, sans-serif;
 }
 .sort {
+  font-size: 24px;
   margin: 40px 0 0 0;
   padding: 0 0 3px 0;
-  border-bottom: 1px solid #444;
 }
 .record {
   background: #eee;
@@ -107,3 +187,23 @@ h1 a, h1 a:visited {
   position: absolute;
   margin-left: -50px;
 }
+.record .label {
+  font-family: 'Franklin Gothic Heavy', 'helvetica neue', helvetica, sans-serif;
+}
+
+/* See http://stackoverflow.com/questions/2610497/change-an-inputs-html5-placeholder-color-with-css */
+::-webkit-input-placeholder { /* WebKit browsers */
+  color: #666;
+  font-family: 'Franklin Gothic Book', 'helvetica neue', helvetica, sans-serif;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: #666;
+  font-family: 'Franklin Gothic Book', 'helvetica neue', helvetica, sans-serif;
+  font-size: 24px;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color: #666;
+  font-family: 'Franklin Gothic Book', 'helvetica neue', helvetica, sans-serif;
+  font-size: 24px;
+}
+
