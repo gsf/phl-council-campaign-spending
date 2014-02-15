@@ -114,7 +114,7 @@ function renderSort (result) {
 
 function renderTop (result) {
   total = result.total;
-  document.querySelector('#search').value = params.q || '';
+  document.getElementById('search').value = params.q || '';
   document.querySelector('.total').innerHTML = accounting.formatNumber(total) || 0;
   if (total) {
     renderFacets('councilperson', result);
@@ -136,3 +136,14 @@ getResult(function (result) {
     }
   }, 250);
 });
+
+function hideTop () {
+  if (params.q) {
+    document.querySelector('.hero').style.display = 'none';
+    var controlPs = document.querySelector('.controls').getElementsByTagName('p');
+    for (var i = 0; i < controlPs.length; i++) {
+      controlPs[i].style.display = 'none';
+    }
+  }
+}
+hideTop();
