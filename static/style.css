@@ -123,7 +123,7 @@ p {
   margin: 0 0 30px 0;
 }
 .search {
-  margin: 0 0 40px 0;
+  margin: 0 0 10px 0;
 }
 .search input {
   background-color: #fde8a6;
@@ -134,6 +134,18 @@ p {
   font-size: 24px;
   padding: 5px 10px;
   width: 100%;
+}
+.submit {
+  margin: 0 0 40px 0;
+}
+.submit input {
+  background-color: #03a6df;
+  border: 1px solid #03a6df;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Franklin Gothic Demi', 'helvetica neue', helvetica, sans-serif;
+  padding: 5px 20px;
 }
 .facets {
   background: url('images/columnback.png') repeat-y 50% 0;
